@@ -3,6 +3,8 @@ package com.gusparro.calculadora.swing.components;
 import javax.swing.*;
 import java.awt.*;
 
+import static java.awt.GridBagConstraints.BOTH;
+
 public class Keyboard extends JPanel {
 
     public Keyboard() {
@@ -15,9 +17,11 @@ public class Keyboard extends JPanel {
 
         setLayout(layout);
 
-        addButton("AC", DARK_GREY, constraints, 0, 0);
-        addButton("AC", DARK_GREY, constraints, 1, 0);
-        addButton("AC", DARK_GREY, constraints, 2, 0);
+        constraints.fill = BOTH;
+        constraints.weightx = 1;
+        constraints.weighty = 1;
+
+        addLargeButton("AC", DARK_GREY, constraints, 0, 0);
         addButton("/", ORANGE, constraints, 3, 0);
 
         addButton("7", LIGHT_GREY, constraints, 0, 1);
@@ -35,8 +39,7 @@ public class Keyboard extends JPanel {
         addButton("3", LIGHT_GREY, constraints, 2, 3);
         addButton("+", ORANGE, constraints, 3, 3);
 
-        addButton("0", LIGHT_GREY, constraints, 0, 4);
-        addButton("0", LIGHT_GREY, constraints, 1, 4);
+        addAverageButton("0", LIGHT_GREY, constraints, 0, 4);
         addButton(",", LIGHT_GREY, constraints, 2, 4);
         addButton("=", ORANGE, constraints, 3, 4);
     }
@@ -44,6 +47,27 @@ public class Keyboard extends JPanel {
     private void addButton(String label, Color color, GridBagConstraints constraints, int x, int y) {
         Button button = new Button(label, color);
 
+        constraints.gridwidth = 1;
+        constraints.gridx = x;
+        constraints.gridy = y;
+
+        add(button, constraints);
+    }
+
+    private void addAverageButton(String label, Color color, GridBagConstraints constraints, int x, int y) {
+        Button button = new Button(label, color);
+
+        constraints.gridwidth = 2;
+        constraints.gridx = x;
+        constraints.gridy = y;
+
+        add(button, constraints);
+    }
+
+    private void addLargeButton(String label, Color color, GridBagConstraints constraints, int x, int y) {
+        Button button = new Button(label, color);
+
+        constraints.gridwidth = 3;
         constraints.gridx = x;
         constraints.gridy = y;
 
