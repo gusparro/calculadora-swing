@@ -1,5 +1,7 @@
 package com.gusparro.calculadora.swing.components;
 
+import com.gusparro.calculadora.swing.models.Memory;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,7 +18,7 @@ public class Display extends JPanel {
         setPreferredSize(new Dimension(232, 60));
         setLayout(new FlowLayout(RIGHT, 10, 25));
 
-        label = new JLabel("123");
+        label = new JLabel(Memory.getInstance().getCurrentText());
         label.setForeground(WHITE);
         label.setFont(new Font("courier", PLAIN, 30));
         add(label);

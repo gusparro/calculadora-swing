@@ -2,10 +2,12 @@ package com.gusparro.calculadora.swing.components;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import static java.awt.GridBagConstraints.BOTH;
 
-public class Keyboard extends JPanel {
+public class Keyboard extends JPanel implements ActionListener {
 
     public Keyboard() {
         Color DARK_GREY = new Color(68, 68, 68);
@@ -20,8 +22,12 @@ public class Keyboard extends JPanel {
         constraints.fill = BOTH;
         constraints.weightx = 1;
         constraints.weighty = 1;
+        constraints.gridwidth = 3;
 
-        addLargeButton("AC", DARK_GREY, constraints, 0, 0);
+        addButton("AC", DARK_GREY, constraints, 0, 0);
+
+        constraints.gridwidth = 1;
+
         addButton("/", ORANGE, constraints, 3, 0);
 
         addButton("7", LIGHT_GREY, constraints, 0, 1);
@@ -39,38 +45,30 @@ public class Keyboard extends JPanel {
         addButton("3", LIGHT_GREY, constraints, 2, 3);
         addButton("+", ORANGE, constraints, 3, 3);
 
-        addAverageButton("0", LIGHT_GREY, constraints, 0, 4);
+        constraints.gridwidth = 2;
+
+        addButton("0", LIGHT_GREY, constraints, 0, 4);
+
+        constraints.gridwidth = 1;
+
         addButton(",", LIGHT_GREY, constraints, 2, 4);
         addButton("=", ORANGE, constraints, 3, 4);
     }
 
-    private void addButton(String label, Color color, GridBagConstraints constraints, int x, int y) {
-        Button button = new Button(label, color);
+    private void addButton(String text, Color color, GridBagConstraints constraints, int x, int y) {
+        Button button = new Button(text, color);
+        button.addActionListener(this);
 
-        constraints.gridwidth = 1;
         constraints.gridx = x;
         constraints.gridy = y;
 
         add(button, constraints);
     }
 
-    private void addAverageButton(String label, Color color, GridBagConstraints constraints, int x, int y) {
-        Button button = new Button(label, color);
-
-        constraints.gridwidth = 2;
-        constraints.gridx = x;
-        constraints.gridy = y;
-
-        add(button, constraints);
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        if (actionEvent.getSource() instanceof JButton button)
+            System.out.println(button.getText());
     }
 
-    private void addLargeButton(String label, Color color, GridBagConstraints constraints, int x, int y) {
-        Button button = new Button(label, color);
-
-        constraints.gridwidth = 3;
-        constraints.gridx = x;
-        constraints.gridy = y;
-
-        add(button, constraints);
-    }
 }
