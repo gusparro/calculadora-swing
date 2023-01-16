@@ -11,6 +11,11 @@ public class Memory {
     private final List<MemoryListener> listeners = new ArrayList<>();
 
     private String currentText = "";
+    private String textBuffer = "";
+
+    private boolean replaceable;
+
+    private TypeOfEvent lastOperation;
 
     private Memory() {
     }
@@ -29,9 +34,23 @@ public class Memory {
 
     public void processInput(String value) {
         TypeOfEvent typeOfEvent = detectTyoeOfEvent(value);
-        System.out.println(typeOfEvent);
 
-        currentText += value;
+        if (typeOfEvent == null) {
+            return;
+        } else if (typeOfEvent == CLEAN) {
+            currentText = "";
+            textBuffer = "";
+            replaceable = false;
+            lastOperation = null;
+        } else if (typeOfEvent == NUMBER || typeOfEvent == COMMA) {
+            currentText = replaceable ? value : currentText + value;
+            replaceable = false;
+        } else {
+            replaceable = true;
+            currentText = getResult();
+            textBuffer = currentText;
+            lastOperation = typeOfEvent;
+        }
 
         listeners.forEach(listener -> listener.updatValue(getCurrentText()));
     }
@@ -46,7 +65,7 @@ public class Memory {
         } catch (NumberFormatException exception) {
             if ("AC".equals(value)) {
                 return CLEAN;
-            } else if (",".equals(value)) {
+            } else if (",".equals(value) && !currentText.contains(",")) {
                 return COMMA;
             } else if ("*".equals(value)) {
                 return MULTI;
@@ -62,5 +81,29 @@ public class Memory {
         }
 
         return null;
+    }
+
+    public String getResult() {
+        if (lastOperation == null || lastOperation == EQUAL)
+            return currentText;
+
+        double result = 0.0;
+        double currentNumber = Double.parseDouble(currentText.replace(",", "."));
+        double numberBuffer = Double.parseDouble(textBuffer.replace(",", "."));
+
+        if (lastOperation == SUM) {
+            result = numberBuffer + currentNumber;
+        } else if (lastOperation == SUB) {
+            result = numberBuffer - currentNumber;
+        } else if (lastOperation == MULTI) {
+            result = numberBuffer * currentNumber;
+        } else if (lastOperation == DIV) {
+            result = numberBuffer / currentNumber;
+        }
+
+        String resultString = Double.toString(result).replace(".", ",");
+        boolean isInteger = resultString.endsWith(",0");
+
+        return isInteger ? resultString.replace(",0", "") : resultString;
     }
 }
