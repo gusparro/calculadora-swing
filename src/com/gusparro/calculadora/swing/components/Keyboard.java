@@ -1,5 +1,7 @@
 package com.gusparro.calculadora.swing.components;
 
+import com.gusparro.calculadora.swing.models.Memory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -68,7 +70,7 @@ public class Keyboard extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() instanceof JButton button)
-            System.out.println(button.getText());
+            Memory.getInstance().processInput(button.getText());
     }
 
 }
